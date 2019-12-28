@@ -14,19 +14,15 @@ import {
   Card,
   CardItem,
 } from 'native-base';
-import ChatsHeader from './ChatsHeader';
+
 
 import { realmConnect } from 'realm-react-redux';
-import EStyleSheet from 'react-native-extended-stylesheet';
-import moment from 'moment';
-import ChatsThreads from './ChatsThreads/ChatsThreads';
+
 
 import { bindActionCreators } from 'redux';
-import AsyncStorage from '@react-native-community/async-storage';
-import { contactOperations } from '../../State/Ducks/Contacts';
+
 import {userOperations} from '../../State/Ducks/User';
-import styles from './styles';
-import TeamThreadItem from '../myteam/TeamThreads/TeamThreadItem';
+
 const { Dimensions, Platform } = React;
 class ChatsScreen extends Component {
   componentDidMount() {
@@ -44,14 +40,14 @@ class ChatsScreen extends Component {
 
       <Container>
       <Header>
-        <Left style={{flex: 1}}>
-          <Button
-            transparent
-            onPress={() => this.props.navigation.navigate ('DrawerOpen')}
-          >
-            <Icon name="menu" />
-          </Button>
-        </Left>
+      <Left style={{ flex: 1 }}>
+            <Button
+              transparent
+              onPress={() => this.props.navigation.goBack()}
+            >
+              <Icon name="arrow-back" />
+            </Button>
+          </Left>
         <Body style={{flex: 1}}>
           <Title>Help</Title>
         </Body>

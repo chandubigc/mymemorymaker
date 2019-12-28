@@ -31,41 +31,55 @@ import { bindActionCreators } from 'redux';
 import AsyncStorage from '@react-native-community/async-storage';
 
 
-import Leaderboard from 'react-native-leaderboard';
+
 import Api from '../../State/Middlewares/Api';
 import { dispatch } from '../../State/ReduxStore';
+import { throwStatement } from '@babel/types';
 const deviceWidth = Dimensions.get("window").width;
-const babyImage = require("../../Images/baby/2.jpg");
+
 const bdayImage = require("../../Images/bday/1.jpg");
 class ServiceDetailsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       active: false,
-      cards:[
-        {
-          text: 'Kids Photography',
-          name: 'Cutness overloaded',
-          description: 'Kids are cute little beings. Each of their cuteness is worth capturing. Kids are vulnerable being who are never stagnant at a place. They keep moving and revolving around.',
-          thumb: require('../../Images/baby-photography.png'),
-          image: babyImage,
-        },
-        {
-          text: 'Birthday Photography',
-          thumb: require('../../Images/birthday-photography.png'),
-          name: 'Celebrations...',
-          description:'In an Indian scenario birthday for parents is no lesser than festivals. We know how special your child’s day is as that day you celebrate your birth as parents. ',
-          image: bdayImage,
-        },
-      ]
-    
      
+      data: [
+    
+    
+      ],
+      category:{},
+      imageUrl:'https://mymemorymaker.in/img/plogo1.png'
     };
   }
 
   async componentDidMount() {
-    let x = 'ddd';
-    console.log('INSIDE DID MOUNT', x);
+    let eventData = this.props.navigation.state.params.eventData;
+    this.setState({category:eventData});
+    this.setState({imageUrl:this.props.navigation.state.params.imageUrl});
+    const response = await Api.post(
+				
+			'album.php',
+			'eventid='+eventData.id,
+			
+		  );
+
+		  if(response && response.data && !response.data.error){
+        console.log("data inside",response.data);
+          let Albumslist = response.data.Albumslist;
+          let AlbumslistData = [];
+          if(Albumslist && Albumslist.length>0){
+            for(var i =0 ; i < Albumslist.length; i++){
+              let Album = Albumslist[i];
+              AlbumslistData.push({id:Album.Id,title:Album['Album Name'],count:1,image:Album['Album Image']})
+            }
+
+          }
+          this.setState({data:AlbumslistData});
+
+
+      }
+  
   
   }
 
@@ -98,7 +112,7 @@ class ServiceDetailsScreen extends Component {
             </Button>
           </Left>
           <Body style={{ flex: 1 }}>
-            <Title>Kids Photography</Title>
+    <Title>{this.state.category.text}</Title>
           </Body>
 
           <Right style={{ flex: 1 }}>
@@ -109,10 +123,10 @@ class ServiceDetailsScreen extends Component {
           <Card style={styles.mb}>
             <CardItem bordered>
               <Left>
-                <Thumbnail source={require('../../Images/baby-photography.png')} />
+                <Thumbnail source={this.state.category.thumb} />
                 <Body>
-                  <Text>Kids Photography</Text>
-                  <Text note>Cutness overloaded</Text>
+                  <Text>{this.state.category.text}</Text>
+                  <Text note>{this.state.category.name}</Text>
                 </Body>
               </Left>
             </CardItem>
@@ -127,18 +141,59 @@ class ServiceDetailsScreen extends Component {
                     width: deviceWidth / 1.18,
                     marginVertical: 5
                   }}
-                  source={bdayImage}
+                  source={{uri:this.state.imageUrl}}
                 />
-                <Text>
-                Kids are cute little beings. Each of their cuteness is worth capturing. Kids are vulnerable being who are never stagnant at a place. They keep moving and revolving around.
-                </Text>
+              
               </Body>
             </CardItem>
             
           </Card>
-        </Content> 
-      
-      
+          <Card style={styles.mb}>
+            <CardItem bordered>
+              <Left>
+               
+                <Body>
+                  <Text>Alubms</Text>
+                
+                </Body>
+              </Left>
+            </CardItem>
+
+            <CardItem>
+              <Body>
+        <View style={styles.container}>
+        <FlatList style={styles.list}
+          
+          data={this.state.data}
+          horizontal={false}
+          numColumns={1}
+          keyExtractor= {(item) => {
+            return item.id;
+          }}
+          ItemSeparatorComponent={() => {
+            return (
+              <View style={styles.separator}/>
+            )
+          }}
+          renderItem={(post) => {
+            const item = post.item;
+            return (
+              <View style={styles.card}>
+                <View style={styles.imageContainer}>
+                  <Image style={styles.cardImage} source={{uri:item.image}}/>
+                </View>
+                <View style={styles.cardContent}>
+                  <Text style={styles.title}>{item.title}</Text>
+                 
+                </View>
+              </View>
+            )
+          }}/>
+      </View>
+      </Body>
+      </CardItem>
+      </Card>
+      </Content> 
       </Container>
     );
   }

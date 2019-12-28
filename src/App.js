@@ -11,15 +11,15 @@ import {
 
 import HomeScreen from './screens/home/index';
 
-
+import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import SideBar from './screens/sidebar';
 import { Dimensions } from 'react-native';
 import ChatsScreen from './screens/chats/index';
+import QRCodeScreen from './screens/qrcode/index';
 import ServiceDetailsScreen from './screens/home/serviceDetails';
 import MyTeamScreen from './screens/myteam/';
 import ProfileScreen from './screens/profile/';
-import PrivateChatsScreen from './screens/chats/PrivateChats/PrivateChatsContainer';
-import TeamChatsScreen from './screens/myteam/TeamChats/TeamChatsContainer';
+
 import { RealmProvider } from 'realm-react-redux';
 import configureRealmStore from './State/RealmStore';
 import EStyleSheet from 'react-native-extended-stylesheet';
@@ -27,6 +27,11 @@ import { Provider } from 'react-redux';
 import configureStore, { dispatch } from './State/ReduxStore';
 import configureReactotron from './Config/ReactotronConfig';
 import AuthLoadingScreen from './screens/user/AuthLoadingScreen';
+import AboutUsScreen from './screens/ReusableComponents/aboutus';
+import TCScreen from  './screens/ReusableComponents/tc';
+import PrivacyScreen from  './screens/ReusableComponents/privacy';
+import WorkWithUsScreen from  './screens/ReusableComponents/workwithus';
+
 import LogInScreen from './screens/user/Login';
 import OTPScreen from './screens/user/OTP';
 import UserDetailsFormScreen from './screens/user/UserDetailsForm';
@@ -58,19 +63,8 @@ function hideTabBar(navigation) {
   return tabBarVisible;
 }
 
-// const Drawer = createDrawerNavigator(
-//   {
-//     Home: { screen: HomeScreen },
 
-//   },
-//   {
-//     initialRouteName: "Home",
-//     contentOptions: {
-//       activeTintColor: "#e91e63"
-//     },
-//     contentComponent: props => <SideBar {...props} />
-//   }
-// );
+
 
 const Home = createStackNavigator(
   {
@@ -92,8 +86,7 @@ const Home = createStackNavigator(
 const Chats = createStackNavigator(
   {
     Chats: ChatsScreen,
-    PrivateChats: PrivateChatsScreen,
-    TeamChats: TeamChatsScreen,
+  
   },
   {
     defaultNavigationOptions: ({ navigation }) => {
@@ -109,6 +102,21 @@ const Chats = createStackNavigator(
 const MyTeam = createStackNavigator(
   {
     MyTeam: MyTeamScreen,
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => {
+      const { routeName } = navigation.state;
+
+      return {
+        header: null,
+      };
+    },
+  }
+);
+
+const QRCode = createStackNavigator(
+  {
+    QRCode: QRCodeScreen,
   },
   {
     defaultNavigationOptions: ({ navigation }) => {
@@ -167,16 +175,16 @@ const AppNavigator = createMaterialTopTabNavigator(
         ),
       },
     },
-    Chats: {
-      screen: Chats,
-      path: '/Chats',
+    QRCode: {
+      screen: QRCode,
+      path: '/QRCode',
       navigationOptions: {
-        title: 'Help',
-        tabBarAccessibilityLabel: 'Help',
+        title: 'My Albums',
+        tabBarAccessibilityLabel: 'My Albums',
         tabBarIcon: ({ tintColor, focused }) => (
           
-          <Icon
-            name={'mail'}
+          <MaterialIcons
+            name={'qrcode-scan'}
             style={{ color: focused ? 'rgba(255, 133, 47, 1)' : 'gray' }}
           />
         ),
@@ -248,6 +256,25 @@ Profile.navigationOptions = ({ navigation }) => ({
   tabBarVisible: hideTabBar(navigation),
 });
 
+const Drawer = createDrawerNavigator(
+  {
+    Home: { screen: AppNavigator },
+    AboutUs: {screen: AboutUsScreen},
+    Privacy :{screen:PrivacyScreen},
+    TC: {screen:TCScreen},
+    WorkWithUs:{screen:WorkWithUsScreen},
+    Help: {screen:ChatsScreen},
+
+  },
+  {
+    initialRouteName: "Home",
+    contentOptions: {
+      activeTintColor: "#e91e63"
+    },
+    contentComponent: props => <SideBar {...props} />
+  }
+);
+
 const AuthStack = createStackNavigator(
   {
     LogIn: LogInScreen,
@@ -270,7 +297,7 @@ const AuthStack = createStackNavigator(
 const MainNavigator = createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
-    App: AppNavigator,
+    App: Drawer,
     Auth: AuthStack,
   },
   {

@@ -113,12 +113,7 @@ class Profile extends Component {
             <Title>My Profile</Title>
           </Body>
           <Right style={{ flex: 1 }}>
-        <Button
-            transparent
-          
-          >
-            <Icon name="create" />
-          </Button>
+       
        </Right>
         </Header>
        

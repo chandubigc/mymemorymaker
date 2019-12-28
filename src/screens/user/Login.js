@@ -21,21 +21,24 @@ export default class LogInScreen extends Component {
 	}
 	async getOTP() {
 	
-		const response = await Api.post(
+		// const response = await Api.post(
 				
-			'login.php',
-			'phone='+this.state.mobileNumber,
+		// 	'login.php',
+		// 	'phone='+this.state.mobileNumber,
 			
-		  );
+		//   );
 
-		  if(response && response.data && !response.data.error){
+		//   if(response && response.data && !response.data.error){
 			  
 
-		  }else{
-			  // toast
-		  }
-		  console.log("API",response);
-
+		//   }else{
+		// 	  // toast
+		//   }
+		//   console.log("API",response);
+		this.props.navigation.navigate('UserDetailsForm', {
+			mobile: this.state.mobileNumber,
+			fromLoginScreen: true,
+		  });
 		
 	}
 

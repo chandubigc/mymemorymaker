@@ -45,9 +45,6 @@ class HomeScreen extends Component {
    
   }
 
-  async getLeaderBoard() {
-   
-  }
 
   componentWillUnmount() {
     geolocation.clearWatch(watchID);
