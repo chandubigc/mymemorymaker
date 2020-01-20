@@ -70,14 +70,22 @@ class UserDetailsForm extends Component {
       mobile: '',
       sliderWidth: 200,
       itemWidth: 100,
-      name: 'Chandrashekhar',
-      email: 'chandubigc@gmail.com',
-      selectedImageName: '1',
+      name: 'r',
+      email: '',
+      _id:'',
+      uid:'',
+     
     };
   }
 
   componentDidMount() {
     this.setState({ mobile: this.props.navigation.state.params.mobile });
+    this.setState({ email: this.props.navigation.state.params.Email });
+    this.setState({ name: this.props.navigation.state.params.Name });
+    this.setState({ _id: this.props.navigation.state.params.UniqueId });
+    this.setState({ uid: this.props.navigation.state.params.Id });
+
+
   }
 
   _renderItem({ item, index }) {
@@ -108,14 +116,15 @@ class UserDetailsForm extends Component {
       
         avatar: '',
         mobile: this.state.mobile,
-        _id: 'MMM-02738502',
+        _id: this.state._id,
         email:this.state.email,
+        uid: this.state.uid,
         isLoggedin: true,
         isVerified: true,
       };
-      console.log('USER OBJ', User);
+      
       User.create(userObject, true);
-      //  realmDispatch(userOperations.updateUser(userObject))
+     
 
       this.props.navigation.navigate('AuthLoading', {
         mobile: this.state.mobileNumber,
@@ -124,55 +133,12 @@ class UserDetailsForm extends Component {
     };
   
 
-  handleSelectedImage = name => {
-    console.log('123', name);
-    this.setState({
-      selectedImageName: name,
-    });
-  };
+
 
   render() {
     return (
       <Container>
-         {/* <Header>
-          <Left>
-            <Button transparent onPress={() => this.props.navigation.goBack()}>
-              <Icon name="arrow-back" />
-            </Button>
-          </Left>
-          <Body>
-            <Title>Personal Details</Title>
-          </Body>
-          <Right />
-        </Header> 
-
-         <View>
-        <DeckSwiper
-            dataSource={this.state.cards}
-            renderItem={item =>
-              <Card style={{ elevation: 3 }}>
-                <CardItem>
-                  <Left>
-                    <Thumbnail source={item.image} />
-                    <Body>
-                      <Text>{item.text}</Text>
-                      <Text note>NativeBase</Text>
-                    </Body>
-                  </Left>
-                </CardItem>
-                <CardItem cardBody>
-                  <Image style={{ height: 100, flex: 1 }} source={item.image} />
-                </CardItem>
-            
-              </Card>
-            }
-          />
-          </View> 
-        <SelectedImagesHorizontalView
-          data={this.state.cards}
-          selectedImageName={this.state.selectedImageName}
-          handleSelectedImage={this.handleSelectedImage}
-        /> */}
+         
 <View style={styles.logoContainer}>
 					{/* <Text style={styles.logo}>ZONO</Text> */}
 					<Image style={styles.images} source={require('../../Images/bjlogon.png')} />

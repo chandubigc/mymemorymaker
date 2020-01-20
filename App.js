@@ -5,7 +5,7 @@ export default class App extends React.Component {
 
 
   componentDidMount() {
-    RNSplashScreen.hide();
+   RNSplashScreen.hide();
  
   }
 

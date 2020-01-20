@@ -35,7 +35,7 @@ export default {
     
   },
   list: {
-    paddingHorizontal: 10,
+   
   },
   listContainer:{
     alignItems:'center'
@@ -48,7 +48,7 @@ export default {
     marginVertical: 8,
     backgroundColor:"white",
     flexBasis: '45%',
-    marginHorizontal: 10,
+  
   },
   cardContent: {
     paddingVertical: 17,
@@ -56,8 +56,8 @@ export default {
   },
   cardImage:{
     flex: 1,
-    height: 150,
     width: null,
+    height: null,
   },
   imageContainer:{
     shadowColor: "#000",
@@ -81,4 +81,33 @@ export default {
     flex:1,
     color:"#B0C4DE"
   },
+  avatar: {
+    width: 280,
+    height: 280,
+    borderRadius: 150,
+    borderWidth: 4,
+    borderColor: "white",
+    marginBottom:10,
+    alignSelf:'center',
+    position: 'absolute',
+    marginTop:20
+  },
+  viewStyle: {
+    flex: 1,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    padding: 1,
+ 
+  },
+  childStyle: {
+    width: '1%',
+  
+   
+   
+  },
+  childStyle1: {
+    width: '99%',
+  
+  
+  }
 };

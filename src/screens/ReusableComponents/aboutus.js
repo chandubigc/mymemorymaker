@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { TouchableOpacity,StyleSheet } from 'react-native';
+import { TouchableOpacity,StyleSheet,View } from 'react-native';
 import {
   Container,
   Header,
@@ -17,7 +17,7 @@ import {
   
 } from 'native-base';
 
-
+import { WebView } from 'react-native-webview';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import styles from './styles';
 import { userOperations } from '../../State/Ducks/User';
@@ -79,7 +79,8 @@ onFabClick(){
             </Button>
           </Left>
           <Body style={{ flex: 1 }}>
-            <Title>About Us</Title>
+           
+            <Text  style={{color: '#fff'}}>About Us</Text>
           </Body>
 
           <Right style={{ flex: 1 }}>
@@ -88,7 +89,18 @@ onFabClick(){
         </Header>
      
     
-
+        <View style={{flex:1}}>
+   <WebView
+ 
+     automaticallyAdjustContentInsets={false}
+     source={{uri:'https://mymemorymaker.in/about.php?app=1'}}
+     javaScriptEnabled={true}
+     domStorageEnabled={true}
+     decelerationRate="normal"
+     startInLoadingState={true}
+     scalesPageToFit={true}
+   />
+</View>
 
        
 

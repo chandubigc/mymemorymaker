@@ -5,7 +5,7 @@ import sagaPlugin from 'reactotron-redux-saga';
 export default function configureReactotron() {
   Reactotron.configure({
     name: 'React Native App',
-    host: '192.168.0.100',
+    host: '192.168.50.68',
     // host: '172.20.10.14',
     // host: '10.0.0.19',
     // host: '192.168.1.113',

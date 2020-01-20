@@ -39,7 +39,7 @@ class Profile extends Component {
       isFetching: false,
      
       mobile: props.user.mobile,
-      email: 'chandubigc@gmail.com',
+      email: props.user.email,
       _id:props.user._id,
       name: props.user.name,
       avatar: props.user.avatar,

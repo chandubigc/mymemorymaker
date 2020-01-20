@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { userOperations } from '../../State/Ducks/User';
 import { Input, Toast } from 'native-base';
 import { Button, ListItem } from 'native-base';
-
+import Api from '../../State/Middlewares/Api';
 
 import AsyncStorage from '@react-native-community/async-storage';
 import _ from 'lodash';
@@ -29,12 +29,12 @@ class OTPScreen extends Component {
   componentDidMount() {
     if (Config.ENV === 'production') {
       this.setState({
-        mobileNumber: this.props.navigation.getParam('mobileNumber', '9999999999'),
+        mobileNumber: this.props.navigation.getParam('mobile', '9999999999'),
       });
     } else {
       this.setState({
-        otp: String(this.props.navigation.getParam('otp', '9999')).split(''),
-        mobileNumber: this.props.navigation.getParam('mobileNumber', '9999999999'),
+        otp: String(this.props.navigation.getParam('otp', '')).split(''),
+        mobileNumber: this.props.navigation.getParam('mobile', '9999999999'),
       });
     }
   }
@@ -43,14 +43,43 @@ class OTPScreen extends Component {
 
 
 
+ 
 
 
   toApp = async() => {
 
+	this.setState({loading:true});
+
+	const response = await Api.post(
+			
+		'loginotp.php',
+		'phone='+this.state.mobileNumber+'&otp='+ parseInt(this.state.otp.join(''), 10),
+		
+	  );
+//{"error":false,"list":[{"Id":"51","Name":"chandrashekhar","Email":"chandubigc@gmail.com","UniqueId":"MMM-02738502","Image":"https:\/\/mymemorymaker.in\/img\/user_profiles\/"}],"status":"success"}
+this.setState({loading:false});
+console.log("response",response);
+if(response && response.data && !response.data.error){
+     let data = response.data;
+	 let Id = Name = Email = UniqueId = '';
+	 if(data.list && data.list.length>0){
+		 let userObj =  data.list[0];
+		 Id = userObj.Id;
+		 Name = userObj.Name;
+		 Email = userObj.Email;
+		 UniqueId = userObj.UniqueId;
+	 }
+
 	this.props.navigation.navigate('UserDetailsForm', {
 		mobile: this.state.mobileNumber,
 		otp: 1234,
+		Id,Name,Email,UniqueId
 	});
+
+}else{
+	//toast.
+}
+	
 
   };
 

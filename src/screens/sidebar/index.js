@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Image } from "react-native";
+import User from '../../State/Model/User';
 import {
   Content,
   Text,
@@ -55,7 +56,12 @@ const datas = [
     icon: "help-circle",
     bg: "#4DCAE0"
   },
- 
+  {
+    name: "Logout",
+    route: "Logout",
+    icon: "md-exit",
+    bg: "#4DCAE0"
+  },
  
 
 ];
@@ -68,7 +74,15 @@ class SideBar extends Component {
       shadowRadius: 4
     };
   }
-
+  async sideNav(routeName){
+    if(routeName === 'Logout'){
+      User.deleteAll();
+      this.props.navigation.navigate('AuthLoading');
+    }
+   else{
+    this.props.navigation.navigate(routeName)
+    }
+  }
   render() {
     return (
       <Container>
@@ -85,7 +99,7 @@ class SideBar extends Component {
               <ListItem
                 button
                 noBorder
-                onPress={() => this.props.navigation.navigate(data.route)}
+                onPress={() => this.sideNav(data.route) }
               >
                 <Left>
                   <Icon

@@ -15,30 +15,34 @@ export default class LogInScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			mobileNumber: '9949412205',
+			mobileNumber: '',
 			loading: false,
 		};
 	}
 	async getOTP() {
-	
-		// const response = await Api.post(
+		this.setState({loading:true});
+
+		
+		const response = await Api.post(
 				
-		// 	'login.php',
-		// 	'phone='+this.state.mobileNumber,
+			'login.php',
+			'phone='+this.state.mobileNumber,
 			
-		//   );
+		  );
+		  this.setState({loading:false});
 
-		//   if(response && response.data && !response.data.error){
-			  
+		  if(response && response.data && !response.data.error){
+			this.props.navigation.navigate('OTP', {
+				mobile: this.state.mobileNumber,
+				fromLoginScreen: true,
+			  });
 
-		//   }else{
-		// 	  // toast
-		//   }
-		//   console.log("API",response);
-		this.props.navigation.navigate('UserDetailsForm', {
-			mobile: this.state.mobileNumber,
-			fromLoginScreen: true,
-		  });
+		  }else{
+			  // toast
+		  }
+		  
+		
+		
 		
 	}
 

@@ -92,7 +92,7 @@ onFabClick(){
            
         topContent={
           <Text style={styles.centerText}>
-            Go to <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on your computer and scan the QR code.
+           Scan Your Album
           </Text>
         }
         bottomContent={

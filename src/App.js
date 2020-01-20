@@ -17,6 +17,8 @@ import { Dimensions } from 'react-native';
 import ChatsScreen from './screens/chats/index';
 import QRCodeScreen from './screens/qrcode/index';
 import ServiceDetailsScreen from './screens/home/serviceDetails';
+import AlbumImagesScreen from './screens/home/AlbumImages';
+
 import MyTeamScreen from './screens/myteam/';
 import ProfileScreen from './screens/profile/';
 
@@ -70,6 +72,7 @@ const Home = createStackNavigator(
   {
     Home: HomeScreen,
     ServiceDetailsScreen:ServiceDetailsScreen,
+    AlbumImagesScreen:AlbumImagesScreen,
    
   },
   {

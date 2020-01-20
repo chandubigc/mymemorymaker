@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ImageBackground, View, StatusBar, Image } from 'react-native';
-import { Alert, PermissionsAndroid, Platform,Dimensions,FlatList,TouchableOpacity,StyleSheet } from 'react-native';
+import { Alert, PermissionsAndroid, Platform,Dimensions,FlatList,TouchableOpacity,StyleSheet,Linking } from 'react-native';
 import {
   Container,
   Header,
@@ -185,7 +185,7 @@ class HomeScreen extends Component {
  }
 
 onFabClick(){
- 
+  Linking.openURL('whatsapp://send?text=&phone=918686365365');
 
 }
 
@@ -250,7 +250,7 @@ onFabClick(){
             style= {{flex:1,marginVertical:10}}
           >
             <View style={{ flex: 1, flexDirection: 'column', margin: 1,alignSelf:"center" }}>
-              <Image   onPress={() => this.onSend(item)} source={item.thumb} />
+              <Image  style={{alignSelf:"center"}}   onPress={() => this.onSend(item)} source={item.thumb} />
           <Text style={{alignSelf:"center",fontSize: 12}}>{item.main}</Text>
               <Text  style={{alignSelf:"center",fontSize: 12}}>Photography</Text>
             </View>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { TouchableOpacity,StyleSheet } from 'react-native';
+import { TouchableOpacity,StyleSheet,View } from 'react-native';
 import {
   Container,
   Header,
@@ -17,7 +17,8 @@ import {
   
 } from 'native-base';
 
-
+import { WebView } from 'react-native-webview';
+import QRCodeScanner from 'react-native-qrcode-scanner';
 import styles from './styles';
 import { userOperations } from '../../State/Ducks/User';
 import { realmConnect } from 'realm-react-redux';
@@ -77,8 +78,9 @@ onFabClick(){
               <Icon name="arrow-back" />
             </Button>
           </Left>
-          <Body style={{ flex: 1 }}>
-            <Title>Terms and Conditions</Title>
+          <Body style={{ flex: 3 }}>
+           
+            <Text  style={{color: '#fff'}}>Terms and Conditions</Text>
           </Body>
 
           <Right style={{ flex: 1 }}>
@@ -87,7 +89,18 @@ onFabClick(){
         </Header>
      
     
-
+        <View style={{flex:1}}>
+   <WebView
+ 
+     automaticallyAdjustContentInsets={false}
+     source={{uri:'https://mymemorymaker.in/terms-and-condition.php?app=1'}}
+     javaScriptEnabled={true}
+     domStorageEnabled={true}
+     decelerationRate="normal"
+     startInLoadingState={true}
+     scalesPageToFit={true}
+   />
+</View>
 
        
 
