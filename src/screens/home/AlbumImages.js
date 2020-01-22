@@ -133,7 +133,7 @@ class AlbumImagesScreen extends Component {
                 imageuri: '',}) }
             />
             <TouchableOpacity
-              activeOpacity={0.5}
+              activeOpacity={1}
               style={styles.closeButtonStyle}
               onPress={() => {
                 console.log("image click","hello");
@@ -225,13 +225,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: 'black',
   },
   closeButtonStyle: {
-    width: 25,
-    height: 25,
+    width: 35,
+    height: 35,
     top: 9,
-    right: 9,
+    right: 15,
     position: 'absolute',
   },
 });

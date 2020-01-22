@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { View,  Image,Dimensions,FlatList,TouchableOpacity } from 'react-native';
+import { View, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 import {
   Container,
   Header,
@@ -17,10 +17,10 @@ import {
   Badge,
   Fab,
   Card,
-  CardItem ,
+  CardItem,
   Thumbnail,
   DeckSwiper
-  
+
 } from 'native-base';
 import { RNCamera, FaceDetector } from 'react-native-camera';
 import CardSection from './abs/CardSection';
@@ -37,138 +37,170 @@ import Api from '../../State/Middlewares/Api';
 import { dispatch } from '../../State/ReduxStore';
 import { throwStatement } from '@babel/types';
 const deviceWidth = Dimensions.get("window").width;
-const imgHeight =  (deviceWidth *(2/3));
+const imgHeight = (deviceWidth * (2 / 3));
 
-const bdayImage = require("../../Images/bday/1.jpg");
+const basic1 = require("../../Images/basic.png");
+const basic2 = require("../../Images/basic2.png");
+const basic3 = require("../../Images/basic3.png");
 class ServiceDetailsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       active: false,
-     
+
       data: [
-    
-    
+
+
       ],
-      position:1,
-      tpositioni:1,
-      category:{},
-      imageUrl:'https://mymemorymaker.in/img/plogo1.png',
-      sliders:[],
-      testimonials:[]
+      position: 1,
+      tpositioni: 1,
+      category: {},
+
+      sliders: [],
+      testimonials: [],
+      mypackages: [],
     };
   }
 
   async componentDidMount() {
     let eventData = this.props.navigation.state.params.eventData;
-    this.setState({category:eventData});
-    this.setState({imageUrl:this.props.navigation.state.params.imageUrl});
-    
+    this.setState({ category: eventData });
+
+
 
     this.loadSlider(eventData.id);
     this.loadAlbums(eventData.id);
     this.loadTestimonials(eventData.id);
-  
-  }
-
-  async loadAlbums(id){
-    const response = await Api.post(
-				
-			'album.php',
-			'eventid='+id,
-			
-		  );
-
-		  if(response && response.data && !response.data.error){
-        console.log("data inside",response.data);
-          let Albumslist = response.data.Albumslist;
-          let AlbumslistData = [];
-          if(Albumslist && Albumslist.length>0){
-            for(var i =0 ; i < Albumslist.length; i++){
-              let Album = Albumslist[i];
-              AlbumslistData.push({id:Album.Id,title:Album['Album Name'],count:1,image:Album['Album Image'],thumbnail_image:Album['Album Image']})
-            }
-
-          }
-          this.setState({data:AlbumslistData});
-
-
-      }
-  
-
+    this.loadPackages(eventData.id);
 
   }
 
-  async loadTestimonials(id){
-    const response = await Api.post(
-			'testimonials.php',
-			'id='+id,
-			 );
+  async loadPackages(id) {
+    const response = await Api.get(
 
-		  if(response && response.data && !response.data.error && response.data.Testimonials){
-        console.log("data inside",response.data);
-          let Albumslist = response.data.Testimonials;
-          let AlbumslistData = [];
-          if(Albumslist && Albumslist.length>0){
-            for(var i =0 ; i < Albumslist.length; i++){
-              let Album = Albumslist[i];
-           
-             // AlbumslistData.push({id:Album.Id,title:Album['Name'],count:1,image:Album['Album Image'],thumbnail_image:Album['Album Image']})
-             AlbumslistData.push({caption:Album['Comment'],title:Album['Name'],imageUrl:Album['Albums'] })
-            }
+      'mypackages.json',
+      '',
 
-          }
-          this.setState({testimonials:AlbumslistData});
+    );
 
-
-      }
-  
-
+    if (response.data && response.data[id]) {
+      this.setState({ mypackages: response.data[id] });
+      console.log("my packae", response.data[id]);
+    }
 
   }
 
-  async loadSlider(id){
-
+  async loadAlbums(id) {
     const response = await Api.post(
-				
-			'sliders.php',
-			'id='+id,
-			
-      );
-      
-      if(response && response.data && !response.data.error && response.data.Sliders){
-        let Sliders = response.data.Sliders;
-        let mappedList = [];
-  
-        for(var i = 0 ; i < Sliders.length; i++){
-            let eventObj = Sliders[i];
-           // mappedList.push({title:eventObj['Event Name'],caption:'My Memory Makers',url:eventObj['Banner Image'] })
-            mappedList.push({title:'',caption:'',url:eventObj['Albums'] })
-          
 
+      'album.php',
+      'eventid=' + id,
+
+    );
+
+    if (response && response.data && !response.data.error) {
+      console.log("data inside", response.data);
+      let Albumslist = response.data.Albumslist;
+      let AlbumslistData = [];
+      if (Albumslist && Albumslist.length > 0) {
+        for (var i = 0; i < Albumslist.length; i++) {
+          let Album = Albumslist[i];
+          AlbumslistData.push({ id: Album.Id, title: Album['Album Name'], count: 1, image: Album['Album Image'], thumbnail_image: Album['Album Image'] })
         }
-        this.setState({sliders:mappedList});
 
       }
+      this.setState({ data: AlbumslistData });
+
+
+    }
+
 
 
   }
 
- async _onPressItem (id,title) {
-    console.log("ON PRESSS",id);
+  async loadTestimonials(id) {
+    const response = await Api.post(
+      'testimonials.php',
+      'id=' + id,
+    );
+
+    if (response && response.data && !response.data.error && response.data.Testimonials) {
+      console.log("data inside", response.data);
+      let Albumslist = response.data.Testimonials;
+      let AlbumslistData = [];
+      if (Albumslist && Albumslist.length > 0) {
+        for (var i = 0; i < Albumslist.length; i++) {
+          let Album = Albumslist[i];
+
+          // AlbumslistData.push({id:Album.Id,title:Album['Name'],count:1,image:Album['Album Image'],thumbnail_image:Album['Album Image']})
+          AlbumslistData.push({ caption: Album['Comment'], title: Album['Name'], imageUrl: Album['Albums'] })
+        }
+
+      }
+      this.setState({ testimonials: AlbumslistData });
+
+
+    }
+
+
+
+  }
+
+  async loadSlider(id) {
+
+    const response = await Api.post(
+
+      'sliders.php',
+      'id=' + id,
+
+    );
+
+    if (response && response.data && !response.data.error && response.data.Sliders) {
+      let Sliders = response.data.Sliders;
+      let mappedList = [];
+
+      for (var i = 0; i < Sliders.length; i++) {
+        let eventObj = Sliders[i];
+        // mappedList.push({title:eventObj['Event Name'],caption:'My Memory Makers',url:eventObj['Banner Image'] })
+        mappedList.push({ title: '', caption: '', url: eventObj['Albums'] })
+
+
+      }
+      this.setState({ sliders: mappedList });
+
+    }
+
+
+  }
+
+  async _onPressItem(id, title) {
+    console.log("ON PRESSS", id);
     // this.props.navigation.navigate('Detail',{item: item});
-    this.props.navigation.navigate('AlbumImagesScreen',{title:title,albumId:id})
+    this.props.navigation.navigate('AlbumImagesScreen', { title: title, albumId: id })
   };
- 
+
 
   componentWillUnmount() {
-   // geolocation.clearWatch(watchID);
+    // geolocation.clearWatch(watchID);
   }
 
-  
 
 
+
+  renderPackDetails(key) {
+    return this.state.mypackages.slice(1).map((mypackage,index) => (
  
+      <CardItem key={index} style={{ justifyContent: 'center',height:15 }}>
+
+                      <Text>
+                     {mypackage[key]}
+                      </Text>
+
+                    </CardItem>  
+      
+    ));
+  }
+
 
 
 
@@ -185,182 +217,266 @@ class ServiceDetailsScreen extends Component {
             </Button>
           </Left>
           <Body style={{ flex: 3 }}>
-    <Text  style={{color: '#fff'}}>{this.state.category.text}</Text>
+            <Text style={{ color: '#fff' }}>{this.state.category.text}</Text>
           </Body>
 
           <Right style={{ flex: 1 }}>
-         
+
           </Right>
         </Header>
         <Content>
-        { this.state.sliders.length>0 && 
-       <Slideshow  
-        dataSource={this.state.sliders}
-        position={this.state.position}
-        onPositionChanged={position => this.setState({ position })} />
-        
-        }
-      
-          {/* <Card >
-            <CardItem bordered>
-              <Left>
-               
-                <Body>
-                  <Text>Albums</Text>
-                
-                </Body>
-              </Left>
-            </CardItem>
+          {this.state.sliders.length > 0 &&
+            <Slideshow
+              dataSource={this.state.sliders}
+              position={this.state.position}
+              onPositionChanged={position => this.setState({ position })} />
 
-            <CardItem>
-              <Body>
-        <View style={styles.container}>
-        <FlatList style={styles.list}
-          
-          data={this.state.data}
-          horizontal={false}
-          numColumns={1}
-          keyExtractor= {(item) => {
-            return item.id;
-          }}
-          ItemSeparatorComponent={() => {
-            return (
-              <View style={styles.separator}/>
-            )
-          }}
-          renderItem={(post) => {
-            const item = post.item;
-            return (
-              <View >
-                <View>
-                  <Image style={{
-                   
-                    height:imgHeight,
-                   
-                    width: deviceWidth,
-                   
-                  }} source={{uri:item.image}}/>
+          }
+
+
+          {this.state.data.length > 0 &&
+            <Card>
+              <CardItem bordered>
+                <Left>
+
+                  <Body>
+                    <Text style={{ color: '#ff852f', fontWeight: 'bold' }}>Albums</Text>
+
+                  </Body>
+                </Left>
+              </CardItem>
+
+              <CardSection>
+
+
+                <FlatList
+
+                  ref={ref => (this.flatListRef = ref)}
+                  data={this.state.data}
+                  showsHorizontalScrollIndicator={false}
+
+                  numColumns={3}
+
+                  renderItem={({ item, index }) => (
+
+
+                    <TouchableOpacity
+
+                      onPress={() => this._onPressItem(item.id, item.title)}
+                    >
+                      <View style={{ flex: 1, flexDirection: 'column', margin: 1, alignSelf: "center" }} >
+                        <Thumbnail
+
+                          square
+                          large
+                          style={styles.thumbnail}
+                          source={{ uri: item.image }}
+                        />
+                      </View>
+                      <Text style={{ marginLeft: 5 }}>{item.title}</Text>
+
+                    </TouchableOpacity>
+                  )}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              </CardSection>
+            </Card>
+          }
+
+          {this.state.mypackages.length > 0 &&
+            <Card >
+              <CardItem bordered>
+                <Left>
+
+                  <Body>
+                    <Text style={{ color: '#ff852f', fontWeight: 'bold',fontSize:20 }}>Pricing</Text>
+
+                  </Body>
+                </Left>
+                <Right>
+                <Button
+							testID="verifyOTP"
+						
+							style={{
+								backgroundColor: '#ff852f' ,
+								...styles.button,
+							}}
+							onPress={() => {
+							 this.toApp();
+							}}
+							
+						>
+							<Text style={styles.buttonText}>
+							BOOK NOW
+							</Text>
+							{this.state.loading && (
+								<View>
+									<ActivityIndicator size="small" color="#fff" />
+								</View>
+							)}
+						</Button>
+							</Right>
+              </CardItem>
+              <CardSection>
+
+
+                <View style={styles.container}>
+
+                  <Card>
+                    <CardItem style={{ justifyContent: 'center' }}>
+
+                      <Thumbnail
+
+                        square
+                        large
+                        style={styles.thumbnail}
+                        source={basic1}
+                      />
+                    </CardItem>
+                    <CardItem style={{ justifyContent: 'center', fontWeight: 'bold' }}>
+
+                      <Text style={{ fontWeight: 'bold' }}>
+                        BASIC
+                </Text>
+
+                    </CardItem>
+
+                    <CardItem style={{ justifyContent: 'center', fontWeight: 'bold' }}>
+
+                      <Text style={{ fontWeight: 'bold', color: '#ff852f', fontSize: 25 }}>
+                        ₹ {this.state.mypackages[0]['BASIC']}
+                      </Text>
+
+                    </CardItem>
+{this.renderPackDetails('BASIC')}
+                  </Card>
+                  <Card>
+                    <CardItem style={{ justifyContent: 'center' }}>
+                      <Thumbnail
+
+                        square
+                        large
+                        style={styles.thumbnail}
+                        source={basic2}
+                      />
+                    </CardItem>
+                    <CardItem style={{ justifyContent: 'center', fontWeight: 'bold' }}>
+
+                      <Text style={{ fontWeight: 'bold' }}>
+                        POPULAR
+                      </Text>
+
+                    </CardItem>
+
+                    <CardItem style={{ justifyContent: 'center', fontWeight: 'bold' }}>
+
+                      <Text style={{ fontWeight: 'bold', color: '#ff852f', fontSize: 25 }}>
+                        ₹ {this.state.mypackages[0]['POPULAR']}
+                      </Text>
+
+                    </CardItem>
+                    {this.renderPackDetails('POPULAR')}
+                  </Card>
+                  <Card>
+                    <CardItem style={{ justifyContent: 'center' }}>
+                      <Thumbnail
+
+                        square
+                        large
+                        style={styles.thumbnail}
+                        source={basic3}
+                      />
+                    </CardItem>
+                    <CardItem style={{ justifyContent: 'center', fontWeight: 'bold' }}>
+
+                      <Text style={{ fontWeight: 'bold' }}>
+                      PREMIUM
+                </Text>
+
+                    </CardItem>
+
+                    <CardItem style={{ justifyContent: 'center', fontWeight: 'bold' }}>
+
+                      <Text style={{ fontWeight: 'bold', color: '#ff852f', fontSize: 25 }}>
+                        ₹ {this.state.mypackages[0]['PREMIUM']}
+                      </Text>
+
+                    </CardItem>
+                    {this.renderPackDetails('PREMIUM')}
+                  </Card>
+
                 </View>
-                <View style={styles.cardContent}>
-                  <Text style={styles.title}>{item.title}</Text>
-                 
-                </View>
-              </View>
-            )
-          }}/>
-      </View>
-      </Body>
-      </CardItem>
-      </Card> */}
-{ this.state.data.length>0 && 
-<Card>
-<CardItem bordered>
-              <Left>
-               
-                <Body>
-                <Text style={{color:'#ff852f',fontWeight: 'bold'}}>Albums</Text>
-                
-                </Body>
-              </Left>
-            </CardItem>
 
-         <CardSection>
-      
 
-<FlatList
-            
-            ref={ref => (this.flatListRef = ref)}
-            data={this.state.data}
-            showsHorizontalScrollIndicator={false}
 
-            numColumns={3}
-           
-            renderItem={({ item, index }) => (
-          
-             
-              <TouchableOpacity
-              
-              onPress={() => this._onPressItem(item.id,item.title)}
-              >
-                <View style={{ flex: 1, flexDirection: 'column', margin: 1,alignSelf:"center" }} >
-                  <Thumbnail
 
-                    square
-                    large
-                    style={styles.thumbnail}
-                    source={{ uri: item.image }}
-                  />
-                </View>
-                <Text style={{ marginLeft:5}}>{item.title}</Text>
-               
-              </TouchableOpacity>
-            )}
-            keyExtractor={(item, index) => index.toString()}
-          />
-</CardSection>
-</Card>
-}
-{ this.state.testimonials.length>0 && 
-  <Card >
-     <CardItem bordered>
-              <Left>
-               
-                <Body>
-                  <Text style={{color:'#ff852f',fontWeight: 'bold'}}>Testimonials</Text>
-                
-                </Body>
-              </Left>
-            </CardItem>
-    <CardSection>
-         
+              </CardSection>
+            </Card>
+          }
 
-              <View style={styles.container}>
-        <View
-     
-        >
-          <FlatList
-            horizontal
-            ref={ref => (this.flatListRef = ref)}
-            data={this.state.testimonials}
-            showsHorizontalScrollIndicator={false}
-          
-            renderItem={({ item, index }) => (
-            
-               
-                <View style={{flex: 0.5, flexDirection: 'row', width: deviceWidth}}>   
-                <View style={[styles.viewStyle, {flex: 1, flexDirection: 'column'}]}>
-                <View style={styles.childStyle} >
-               <Thumbnail   source={{ uri : item.imageUrl}} />
-              
-            </View>
-           
-                </View>
-                <View style={[styles.viewStyle, {flex: 3, flexDirection: 'column'}]}>
-                <View style={styles.childStyle1} >
-            <Text>{item.caption}</Text><Text style={{color:'#ff852f',fontWeight: 'bold',fontStyle: 'italic'}}>--{item.title}</Text>
-            </View>
-          
+
+
+          {this.state.testimonials.length > 0 &&
+            <Card >
+              <CardItem bordered>
+                <Left>
+
+                  <Body>
+                    <Text style={{ color: '#ff852f', fontWeight: 'bold' }}>Testimonials</Text>
+
+                  </Body>
+                </Left>
+              </CardItem>
+              <CardSection>
+
+
+                <View style={styles.container}>
+                  <View
+
+                  >
+                    <FlatList
+                      horizontal
+                      ref={ref => (this.flatListRef = ref)}
+                      data={this.state.testimonials}
+                      showsHorizontalScrollIndicator={false}
+
+                      renderItem={({ item, index }) => (
+
+
+                        <View style={{ flex: 0.5, flexDirection: 'row', width: deviceWidth }}>
+                          <View style={[styles.viewStyle, { flex: 1, flexDirection: 'column' }]}>
+                            <View style={styles.childStyle} >
+                              <Thumbnail source={{ uri: item.imageUrl }} />
+
+                            </View>
+
+                          </View>
+                          <View style={[styles.viewStyle, { flex: 3, flexDirection: 'column' }]}>
+                            <View style={styles.childStyle1} >
+                              <Text>{item.caption}</Text><Text style={{ color: '#ff852f', fontWeight: 'bold', fontStyle: 'italic' }}>--{item.title}</Text>
+                            </View>
+
+                          </View>
+
+
+                        </View>
+
+
+
+                      )}
+                      keyExtractor={(item, index) => index.toString()}
+                    />
+                  </View>
                 </View>
 
 
-                </View>
-              
-                
-            
-            )}
-            keyExtractor={(item, index) => index.toString()}
-          />
-        </View>
-      </View>
 
 
-     
-   
-        </CardSection>
-    </Card>    
-        }
+              </CardSection>
+            </Card>
+          }
 
-      </Content>
+        </Content>
 
       </Container>
     );

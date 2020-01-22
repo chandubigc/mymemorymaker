@@ -150,10 +150,10 @@ class HomeScreen extends Component {
                   mappedList.push({title:'',caption:'',url:eventObj['Banner Image'] })
                 
                   console.log("IMAGE",eventObj['Banner Image'])
-                  imageMap[eventObj.Id] = eventObj['Banner Image'];
+                
 
               }
-              this.setState({dataSource:mappedList,imageMap:imageMap});
+              this.setState({dataSource:mappedList});
 
 		  }else{
 			  // toast
@@ -181,7 +181,7 @@ class HomeScreen extends Component {
   
 
  async onSend(item){
-   this.props.navigation.navigate('ServiceDetailsScreen',{eventData:item,imageUrl:this.state.imageMap[item.id]});
+   this.props.navigation.navigate('ServiceDetailsScreen',{eventData:item});
  }
 
 onFabClick(){
